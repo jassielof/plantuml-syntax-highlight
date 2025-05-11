@@ -1,0 +1,36 @@
+{
+  "name": "plantuml-syntax-highlight",
+  "displayName": "PlantUML Syntax Highlight",
+  "description": "Better PlantUML syntax hightlighting.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "plantuml",
+        "aliases": [
+          "PlantUML",
+          "plantuml"
+        ],
+        "extensions": [
+          ".pu",
+          ".plantuml",
+          ".puml"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "plantuml",
+        "scopeName": "source.plantuml",
+        "path": "./syntaxes/plantuml.tmLanguage.json"
+      }
+    ]
+  }
+}

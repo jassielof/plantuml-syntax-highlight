@@ -1,0 +1,40 @@
+@startuml use-case
+' Skin parameters
+skinparam actorStyle awesome
+' Directions
+top to right direction
+' Or `left to right direction`
+
+' Single line comment
+' Single line comments don't work in the middle of a line
+' For example, if you try to do this:
+' ```usecase UC1 ' This is not a comment and will result in error```
+' it will not work (this case isn't applied to block comments, they work)
+
+/''
+ ' Multi-line comment
+ '/
+
+
+
+(First use case) as (UC1) /' comment '/
+(Another use case) as (UC2)
+usecase UC3
+usecase  (Last \nuse case) as (UC4)
+
+:User: --> (Use)
+"Main Admin" as Admin
+"Use the application" as (Use)
+Admin --> (Admin the application)
+
+usecase DescriptiveUseCase as "This is a descriptive multi-line use case
+you can have several lines to describe it.
+There are also the following separators: `--`, `..`, `==`, and `__`.
+--
+Separations
+==
+Some text can be written
+..There can also be text/titles between the separators..
+End."
+
+@enduml
