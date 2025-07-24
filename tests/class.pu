@@ -1,2 +1,87 @@
-@startuml class
+@startuml domain
+title "Domain Model for Event Management System"
+caption Diagram
+hide empty members
+left to right direction
+' skinparam linetype polyline
+' skinparam linetype ortho
+' !pragma layout smetana
+
+' === Domain Models ===
+
+package "Usuarios y Roles" {
+  object "Usuario" as User <<Abstract>> <<Entity>>
+  object "Cliente" as Client <<AggregateRoot>> <<Entity>>
+  object "Personal" as Staff <<AggregateRoot>> <<Entity>>
+}
+
+package "Proceso Central (Reservas y Eventos)" <<Process>> {
+  object "Reserva" as Reservation <<AggregateRoot>> <<Entity>>
+  object "Evento" as Event <<AggregateRoot>> <<Entity>>
+  object "Fecha" as EventDate <<ValueObject>>
+}
+
+package "Ofertas y Servicios" {
+  object "Paquete" as Package <<ValueObject>>
+  object "Servicio" as Service <<ValueObject>>
+  object "Servicio Externo" as ExternalService <<ValueObject>>
+}
+
+package "Recursos del Salón" {
+  object "Recurso" as Resource <<Abstract>> <<Entity>>
+  object "Recurso Material" as MaterialResource <<Entity>>
+}
+
+package "Organización y Ubicación" <<Node>> {
+  object "Empresa" as Company <<AggregateRoot>> <<Entity>>
+  object "Sucursal" as Branch <<AggregateRoot>> <<Entity>>
+  object "Salón de Eventos" as EventsHall <<AggregateRoot>> <<Entity>>
+  object "Espacio" as Space <<Entity>>
+  object "Tipo de Evento" as EventType <<ValueObject>>
+}
+
+' === Associations & Relationships ===
+
+' Organization Hierarchy
+Company "1" *-down- "1..*" Branch : posee >
+Branch "1" *-right- "1..*" EventsHall : gestiona >
+EventsHall "1" *-up- "1..*" Space : se compone de >
+
+' Event Management
+Space "1" -left-- "0..*" EventType : es adecuado para >
+
+' User Hierarchy
+User <|-right- Staff
+
+' Main Workflow: Client -> Reservation -> Event
+Client "1" -- "0..*" Reservation : realiza >
+
+Reservation "1" -- "1" Space : para >
+Reservation "1" -down- "1" EventDate : se realiza en >
+Reservation "1" .left.> "1" Event : se concreta en
+
+Event "1" -left- "1" Space : ocurre en >
+Event "1" -left- "1" EventDate : ocurre en >
+Event "1" -- "1" Client : es para >
+
+' Staff
+Staff "0..*" -- "0..*" Event : organiza >
+Staff "0..*" -- "0..*" Reservation : gestiona >
+
+' Deals & Offers
+Reservation "1" -- "0..*" Package : incluye >
+Reservation "1" -- "0..*" Service : solicita adicionalmente >
+Reservation "1" -right- "0..*" ExternalService : contrata >
+
+' Package Composition
+Package "1" -left- "1..*" Service : compuesto por >
+
+' Services and Packages
+EventsHall "1" -left- "0..*" Package : ofrece >
+EventsHall "1" -- "0..*" Service : ofrece >
+
+' Resources
+Resource <|-right- MaterialResource
+EventsHall "1" -- "0..*" MaterialResource : provee >
+
 @enduml

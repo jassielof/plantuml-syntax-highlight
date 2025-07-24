@@ -1,7 +1,7 @@
 {
   "name": "plantuml-syntax-highlight",
   "displayName": "PlantUML Syntax Highlight",
-  "description": "Better PlantUML syntax hightlighting.",
+  "description": "Better PlantUML syntax highlighting.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.100.0"
